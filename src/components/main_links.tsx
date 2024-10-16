@@ -4,29 +4,29 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { Text, View } from "react-native";
 import { Link } from "expo-router";
 
-function MainLinkItem({ title, linkRef } : { title:string, linkRef:string }) {
+function MainLinkItem({ title } : { title:string }) {
     return (
-        <Link href={linkRef} className="mx-4">
-            <View className="flex flex-row justify-center space-x-[4px] items-center">
-                <FontAwesomeIcon color="#0369a1" icon={faGlobe} size={20}/>
-                <Text className="text-lg underline text-sky-700">{title}</Text>
-            </View>
-        </Link>
+        <View className="flex flex-row flex-wrap justify-center space-x-1 space-y-2 items-center">
+            <FontAwesomeIcon color="#0369a1" icon={faGlobe} size={20}/>
+            <Text className="text-base underline text-sky-700">{title}</Text>
+        </View>
     );
 }
 
-export default function MainLinksComponent({ title1, link1, title2, link2, } : { title1: string, link1: string, title2: string, link2: string, }) {
+export default function MainLinksComponent({ title1, title2 } : { title1: string, title2: string }) {
     return (
-        <View className="flex flex-row items-center">
-            <MainLinkItem
-                title={title1}
-                linkRef={link1}
-            />
+        <View className="flex flex-col items-center justify-center">
+            <Text className="text-lg text-slate-800 font-semibold text-center justify-center">My links</Text>
+            
+            <View className="flex flex-col justify-start items-start">
+                <MainLinkItem
+                    title={title1}
+                />
 
-            <MainLinkItem
-                title={title2}
-                linkRef={link2}
-            />
+                <MainLinkItem
+                    title={title2}
+                />
+            </View>
         </View>
     );
 }

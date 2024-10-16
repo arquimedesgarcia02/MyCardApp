@@ -10,33 +10,34 @@ import { faPenToSquare, faShareFromSquare } from "@fortawesome/free-solid-svg-ic
 
 export default function Index() {
     return (
-        <SafeAreaView className="flex-1 bg-slate-100 p-10 justify-center items-center">
-            <View className="items-center">
-                <Text className="text-4xl text-slate-600">Hello, I'm 👋</Text>
-                <Text className="text-5xl text-indigo-600">{user.username}</Text>
-            </View>
+        <SafeAreaView className="flex-1 items-center justify-center bg-slate-200">
+            <View id="title+photo">
+                <View className="pt-10 px-10">
+                    <Text className="text-3xl text-center text-slate-600">Hello, I'm 👋</Text>
+                    <Text className="text-4xl text-center text-indigo-600">{user.username}</Text>
+                </View>
+                
+                <View className="items-center justify-center pb-10">
+                    <Image
+                        className="h-32 w-32 rounded-full bg-indigo-800"    
+                        source={{
+                        uri: user.userImgPath,
+                        }}
+                    />
 
-            <View className="flex flex-col p-10 justify-center items-center">
-                <Image
-                    className="h-32 w-32 rounded-full bg-indigo-800"    
-                    source={{
-                    uri: user.userImgPath,
-                    }}
-                />
-
-                <Text className="text-slate-600 text-2xl">{user.job}</Text>
+                    <Text className="text-slate-600 text-2xl mt-2">{user.job}</Text>
+                    <Text className="text-slate-900 text-lg mt-2">{user.status}</Text>
+                </View>
             </View>
 
             <MainLinksComponent
-                title1={user.mainlink1.title}
-                title2={user.mainlink2.title}
-                link1={user.mainlink1.link}
-                link2={user.mainlink2.link}
+                title1={user.mainlink1}
+                title2={user.mainlink2}
             />
 
             <SocialMediaComponent/>
 
-            <View className="flex flex-row">
+            <View className="flex flex-row items-center justify-around bg-slate-200">
                 <LinkIconButton
                     title="Edit"
                     linkRef={'/edit'}
@@ -48,8 +49,7 @@ export default function Index() {
                     linkRef={'/edit'}
                     iconName={faShareFromSquare}
                 />
-            </View>
-            
+            </View>            
         </SafeAreaView>
     );
 }

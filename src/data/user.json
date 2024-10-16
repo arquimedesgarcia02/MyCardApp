@@ -1,17 +1,11 @@
 {
-    "username": "John Doe",
-    "userImgPath": "https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "job": "Software Developer",
+    "username": "Your Name",
+    "userImgPath": "https://images.pexels.com/photos/52608/pexels-photo-52608.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    "job": "Your Profession",
     "location": "San Francisco, California",
-    "status": "Working",
-    "mainlink1": {
-        "title": "My Website",
-        "link": "https://www.google.com"
-    },
-    "mainlink2": {
-        "title": "My Blog",
-        "link": "https://www.youtube.com"
-    },
+    "status": "Looking for a Job",
+    "mainlink1": "www.google.com",
+    "mainlink2": "www.youtube.com",
     "socialmedia": [
         "https://www.youtube.com/",
         "https://www.x.com/",
