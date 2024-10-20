@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView, StatusBar, Text, View } from "react-native";
 
 import user from '../data/user.json'
 import SocialMediaComponent from "../components/social_media";
@@ -11,6 +11,7 @@ import { faPenToSquare, faShareFromSquare } from "@fortawesome/free-solid-svg-ic
 export default function Index() {
     return (
         <SafeAreaView className="flex-1 items-center justify-center bg-slate-200">
+            <StatusBar/>
             <View id="title+photo">
                 <View className="pt-10 px-10">
                     <Text className="text-3xl text-center text-slate-600">Hello, I'm 👋</Text>
