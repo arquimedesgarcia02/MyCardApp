@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ag.mycardapp"
     },
     "web": {
       "bundler": "metro",
@@ -27,7 +28,17 @@
       "favicon": ""
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-build-properties",
+      "expo-build-properties",
+      {
+        "ios": {
+          "newArchEnabled": true
+        },
+        "android": {
+          "newArchEnabled": true
+        }
+      }
     ],
     "experiments": {
       "typedRoutes": true
