@@ -27,14 +27,14 @@ function InfoTitle({ title }: { title: string }) {
 function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multiline, numberOfLines, maxLength }: TextInputProps ) {
     return (
         <TextInput
-        onChangeText={onChangeText}
-        value={value}
-        className="text-base text-slate-800 px-4 py-2.5 my-2 w-72 bg-slate-300 rounded-md"
-        placeholder={placeholder}
-        cursorColor={cursorColor}
-        maxLength={maxLength}
-        multiline={multiline}
-        numberOfLines={numberOfLines}
+            onChangeText={onChangeText}
+            value={value}
+            className="text-base text-slate-800 px-4 py-2.5 my-2 w-72 bg-slate-300 rounded-md"
+            placeholder={placeholder}
+            cursorColor={cursorColor}
+            maxLength={maxLength}
+            multiline={multiline}
+            numberOfLines={numberOfLines}
         />
     );
 }
@@ -42,60 +42,111 @@ function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multilin
 const cursorColor = "#475569";
 
 // Async Storage:
-async function storeData(value: string){
+async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string){
+    const name: [string, string] = ["name", nameValue];
+    const profession: [string, string] = ["profession", professionValue];
+    const status: [string, string] = ["status", statusValue];
+    const location: [string, string] = ["location", locationValue];
+    const description: [string, string] = ["description", descriptionValue];
+    
     try {
-        if (value !== null) {
-            await AsyncStorage.setItem('name', value);
-            
-            console.log('Data saved.');
-            return;
-        }
-
-        console.error('Error: null value.');
+        await AsyncStorage.multiSet([name, profession, status, location, description]);
     } catch (error) {
         console.log('Saving data error: ', error);
     }
 }
     
-    function MainInfoInputs() {
-        const [form, setForm] = useState({
-            name: '',
-            profession: '',
-            location: ''
-        });
-        
-        async function HandleSaveForm(username: string){
-            try {
-                console.log(username);
-                
-                await storeData(username);
-                router.navigate("/");
-            } catch (error) {
-                console.error('Saving data error.');
-            }
+function MainInfoInputs() {
+    const [form, setForm] = useState({
+        name: '',
+        profession: '',
+        status: '',
+        location: '',
+        description: ''
+    });
+    
+    async function HandleSaveForm(name: string, profession: string, status: string, location: string, description: string){
+        try {
+            await storeFormData(name, profession, status, location, description);
+            router.navigate("/");
+        } catch (error) {
+            console.error('Saving data error.');
         }
+    }
         
-        return (
-            <KeyboardAvoidingView className="mt-10">
+    return (
+        <KeyboardAvoidingView className="mt-10">
             <IconTitle iconName={faIdCard} iconSize={20} title="Add your info here"/>
             
             <InfoTitle title="Name"/>
-
             <InfoTextInput
-                placeholder="Add your name here."
+                placeholder="What's your name?"
                 cursorColor={cursorColor}
                 value={form.name}
                 onChangeText={formName => {
                     setForm({
-                      ...form,
-                      name: formName.valueOf()
+                        ...form,
+                        name: formName.valueOf()
                     });
                 }}
             />
 
-            <Text>{form.name}</Text>
+            <InfoTitle title="Profession"/>
+            <InfoTextInput
+                placeholder="What's your job?"
+                cursorColor={cursorColor}
+                value={form.profession}
+                onChangeText={formProfession => {
+                    setForm({
+                        ...form,
+                        profession: formProfession.valueOf()
+                    });
+                }}
+            />
 
-            <SaveButton onPress={async () => await HandleSaveForm(form.name)}/>
+            <InfoTitle title="Status"/>
+            <InfoTextInput
+                placeholder="Are you working? looking for a job?"
+                cursorColor={cursorColor}
+                value={form.status}
+                onChangeText={formStatus => {
+                    setForm({
+                        ...form,
+                        status: formStatus.valueOf()
+                    });
+                }}
+            />
+
+            <InfoTitle title="Location"/>
+            <InfoTextInput
+                placeholder="Where you live?"
+                cursorColor={cursorColor}
+                value={form.location}
+                onChangeText={formLocation => {
+                    setForm({
+                        ...form,
+                        location: formLocation.valueOf()
+                    });
+                }}
+            />
+
+            <InfoTitle title="Description"/>
+            <InfoTextInput
+                multiline
+                editable
+                numberOfLines={4}
+                maxLength={120}
+                placeholder="Write a short description about yourself, what you do, what you like, your skills, etc."
+                value={form.description}
+                onChangeText={formDescription => {
+                    setForm({
+                        ...form,
+                        description: formDescription
+                    })
+                }}
+            />
+
+            <SaveButton onPress={() => HandleSaveForm(form.name, form.profession, form.status, form.location, form.description)}/>
         </KeyboardAvoidingView>
     );
 }

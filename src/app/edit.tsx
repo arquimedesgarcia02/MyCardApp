@@ -1,8 +1,9 @@
 import { SafeAreaView, ScrollView, StatusBar } from "react-native";
 import FormComponent from "../components/form/form";
 
+const barColor = "#e2e8f0";
+
 export default function Edit() {
-    const barColor = "#e2e8f0";
 
     return (
         <SafeAreaView className="bg-slate-200 flex-1 items-center justify-center">
