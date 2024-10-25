@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { MMKV } from 'react-native-mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faIdCard } from "@fortawesome/free-solid-svg-icons";
 
 import { View, Text, TextInput, TextInputProps, KeyboardAvoidingView } from "react-native";
+import { router } from "expo-router";
 
-const cursorColor = "#475569";
+import SaveButton from "../buttons/SaveButton";
 
 function IconTitle({ title, iconName, iconSize } : { title: string, iconName: IconProp, iconSize: number } ) {
     return (
@@ -26,21 +27,56 @@ function InfoTitle({ title }: { title: string }) {
 function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multiline, numberOfLines, maxLength }: TextInputProps ) {
     return (
         <TextInput
-            onChangeText={onChangeText}
-            value={value}
-            className="text-base text-slate-800 px-4 py-2.5 my-2 w-72 bg-slate-300 rounded-md"
-            placeholder={placeholder}
-            cursorColor={cursorColor}
-            maxLength={maxLength}
-            multiline={multiline}
-            numberOfLines={numberOfLines}
+        onChangeText={onChangeText}
+        value={value}
+        className="text-base text-slate-800 px-4 py-2.5 my-2 w-72 bg-slate-300 rounded-md"
+        placeholder={placeholder}
+        cursorColor={cursorColor}
+        maxLength={maxLength}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
         />
     );
 }
 
-function MainInfoInputs() {
-    return (
-        <KeyboardAvoidingView className="mt-10">
+const cursorColor = "#475569";
+
+// Async Storage:
+async function storeData(value: string){
+    try {
+        if (value !== null) {
+            await AsyncStorage.setItem('name', value);
+            
+            console.log('Data saved.');
+            return;
+        }
+
+        console.error('Error: null value.');
+    } catch (error) {
+        console.log('Saving data error: ', error);
+    }
+}
+    
+    function MainInfoInputs() {
+        const [form, setForm] = useState({
+            name: '',
+            profession: '',
+            location: ''
+        });
+        
+        async function HandleSaveForm(username: string){
+            try {
+                console.log(username);
+                
+                await storeData(username);
+                router.navigate("/");
+            } catch (error) {
+                console.error('Saving data error.');
+            }
+        }
+        
+        return (
+            <KeyboardAvoidingView className="mt-10">
             <IconTitle iconName={faIdCard} iconSize={20} title="Add your info here"/>
             
             <InfoTitle title="Name"/>
@@ -48,12 +84,21 @@ function MainInfoInputs() {
             <InfoTextInput
                 placeholder="Add your name here."
                 cursorColor={cursorColor}
+                value={form.name}
+                onChangeText={formName => {
+                    setForm({
+                      ...form,
+                      name: formName.valueOf()
+                    });
+                }}
             />
+
+            <Text>{form.name}</Text>
+
+            <SaveButton onPress={async () => await HandleSaveForm(form.name)}/>
         </KeyboardAvoidingView>
     );
 }
-
-const storage = new MMKV()
 
 export default function FormComponent(){
     return (
@@ -62,7 +107,7 @@ export default function FormComponent(){
                 <Text className="text-slate-800 text-center justify-center text-xl">Add here your information</Text>
                 <Text className="text-slate-600 text-center justify-center text-sm">The information will be displayed in your card</Text>
             </View>
-
+            
             <MainInfoInputs/>
         </View>
     );
