@@ -5,7 +5,6 @@ import { Image, SafeAreaView, StatusBar, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import SocialMediaComponent from "../components/social_media";
-import MainLinksComponent from "../components/main_links";
 import LinkIconButton from "../components/buttons/LinkIconButton";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -30,9 +29,9 @@ async function getData(keyName: string) {
 function TextName({ name }: { name: string | undefined }) {
     return (
         <View className="ml-2">
-            <Text className="text-2xl text-center text-slate-600">Hi, I'm 👋</Text>
+            <Text className="text-xl text-left text-slate-600">Hi, I'm 👋</Text>
             { name ? (
-                <Text className="text-indigo-600 text-3xl text-center">{name}</Text>
+                <Text className="text-indigo-600 text-2xl text-left">{name}</Text>
             ) : (
                 <Text>Loading data...</Text>
             )}
@@ -61,8 +60,8 @@ function Label({ title, text, iconName }: { title: string, text: string | undefi
 
 function LinkLabel({ text }: { text: string | undefined } ) {
     return (
-        <View className="flex flex-row space-x-4 my-2">
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} size={26}/>
+        <View className="flex flex-row items-center justify-center space-x-4 my-2">
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} size={20}/>
             
             { text ? (
                 <View>
@@ -111,15 +110,16 @@ export default function Index() {
         <SafeAreaView className="flex-1 items-center justify-center bg-slate-200 px-10">
             <StatusBar/>
 
-            <View className="flex flex-col items-center justify-center px-4">
-                <TextName name={name}/>
-
-                <Image
-                    className="h-28 w-28 rounded-full"    
+            <View className="flex flex-row items-center justify-start px-4">
+                <Image    
                     source={{
                         uri: 'https://images.pexels.com/photos/52608/pexels-photo-52608.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                     }}
+                    height={90}
+                    width={90}
+                    borderRadius={90}
                 />
+                <TextName name={name}/>
             </View>
 
             <View className="mt-4 border-b border-b-slate-600 pb-4">
@@ -148,6 +148,8 @@ export default function Index() {
             </View>
 
             <View className="items-start justify-start w-full px-2 mb-4">
+                <Text className="font-semibold text-slate-800 text-xl mb-2">Links</Text>
+                
                 <LinkLabel
                     text={link1}
                 />
@@ -157,7 +159,11 @@ export default function Index() {
                 />
             </View>
 
-            <View className="flex flex-row items-center justify-around">
+            <View className="items-start justify-start w-full px-2 mb-4">
+                <Text className="font-semibold text-slate-800 text-xl mb-2">Social Media</Text>
+            </View>
+
+            <View className="flex flex-row w-full items-center justify-around">
                 <LinkIconButton
                     title="Edit"
                     linkRef={'/edit'}
