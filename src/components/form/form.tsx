@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faIdCard } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faGlobe, faIdCard } from "@fortawesome/free-solid-svg-icons";
 
-import { View, Text, TextInput, TextInputProps, KeyboardAvoidingView } from "react-native";
+import { View, Text, TextInput, TextInputProps, KeyboardAvoidingView, ScrollView } from "react-native";
 import { router } from "expo-router";
 
 import SaveButton from "../buttons/SaveButton";
+import LinkIconButton from "../buttons/LinkIconButton";
 
 function IconTitle({ title, iconName, iconSize } : { title: string, iconName: IconProp, iconSize: number } ) {
     return (
@@ -42,32 +43,36 @@ function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multilin
 const cursorColor = "#475569";
 
 // Async Storage:
-async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string){
+async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string, link1Value: string, link2Value: string){
     const name: [string, string] = ["name", nameValue];
     const profession: [string, string] = ["profession", professionValue];
     const status: [string, string] = ["status", statusValue];
     const location: [string, string] = ["location", locationValue];
     const description: [string, string] = ["description", descriptionValue];
+    const link1: [string, string] = ["link1", link1Value];
+    const link2: [string, string] = ["link2", link2Value];
     
     try {
-        await AsyncStorage.multiSet([name, profession, status, location, description]);
+        await AsyncStorage.multiSet([name, profession, status, location, description, link1, link2]);
     } catch (error) {
         console.log('Saving data error: ', error);
     }
 }
     
-function MainInfoInputs() {
+function Inputs() {
     const [form, setForm] = useState({
         name: '',
         profession: '',
         status: '',
         location: '',
-        description: ''
+        description: '',
+        link1: '',
+        link2: '',
     });
     
-    async function HandleSaveForm(name: string, profession: string, status: string, location: string, description: string){
+    async function HandleSaveForm(name: string, profession: string, status: string, location: string, description: string, link1: string, link2: string){
         try {
-            await storeFormData(name, profession, status, location, description);
+            await storeFormData(name, profession, status, location, description, link1, link2);
             router.navigate("/");
         } catch (error) {
             console.error('Saving data error.');
@@ -75,91 +80,134 @@ function MainInfoInputs() {
     }
         
     return (
-        <KeyboardAvoidingView className="mt-10">
-            <IconTitle iconName={faIdCard} iconSize={20} title="Add your info here"/>
-            
-            <InfoTitle title="Name"/>
-            <InfoTextInput
-                placeholder="What's your name?"
-                cursorColor={cursorColor}
-                value={form.name}
-                onChangeText={formName => {
-                    setForm({
-                        ...form,
-                        name: formName.valueOf()
-                    });
-                }}
-            />
+        <KeyboardAvoidingView className="mt-10 mb-4 space-y-4">
+            <View className="flex items-center justify-center mb-10">
+                <Text className="text-slate-800 text-xl">Tell Us About Yourself</Text>
+                <Text className="text-slate-600 text-base text-center leading-5 w-72">Fill out the form below to create a standout profile that highlights your skills and experience.</Text>
+            </View>
 
-            <InfoTitle title="Profession"/>
-            <InfoTextInput
-                placeholder="What's your job?"
-                cursorColor={cursorColor}
-                value={form.profession}
-                onChangeText={formProfession => {
-                    setForm({
-                        ...form,
-                        profession: formProfession.valueOf()
-                    });
-                }}
-            />
+            {/* Lot of repetition here, should change that */}
+            <View>
+                <IconTitle iconName={faIdCard} iconSize={20} title="Your Profile Details"/>
+                
+                <InfoTitle title="Name"/>
+                <InfoTextInput
+                    placeholder="What's your name?"
+                    cursorColor={cursorColor}
+                    value={form.name}
+                    onChangeText={formName => {
+                        setForm({
+                            ...form,
+                            name: formName.valueOf()
+                        });
+                    }}
+                />
 
-            <InfoTitle title="Status"/>
-            <InfoTextInput
-                placeholder="Are you working? looking for a job?"
-                cursorColor={cursorColor}
-                value={form.status}
-                onChangeText={formStatus => {
-                    setForm({
-                        ...form,
-                        status: formStatus.valueOf()
-                    });
-                }}
-            />
+                <InfoTitle title="Profession"/>
+                <InfoTextInput
+                    placeholder="What's your job?"
+                    cursorColor={cursorColor}
+                    value={form.profession}
+                    maxLength={40}
+                    onChangeText={formProfession => {
+                        setForm({
+                            ...form,
+                            profession: formProfession.valueOf()
+                        });
+                    }}
+                />
 
-            <InfoTitle title="Location"/>
-            <InfoTextInput
-                placeholder="Where you live?"
-                cursorColor={cursorColor}
-                value={form.location}
-                onChangeText={formLocation => {
-                    setForm({
-                        ...form,
-                        location: formLocation.valueOf()
-                    });
-                }}
-            />
+                <InfoTitle title="Status"/>
+                <InfoTextInput
+                    placeholder="Are you working? looking for a job?"
+                    cursorColor={cursorColor}
+                    value={form.status}
+                    maxLength={40}
+                    onChangeText={formStatus => {
+                        setForm({
+                            ...form,
+                            status: formStatus.valueOf()
+                        });
+                    }}
+                />
 
-            <InfoTitle title="Description"/>
-            <InfoTextInput
-                multiline
-                editable
-                numberOfLines={4}
-                maxLength={120}
-                placeholder="Write a short description about yourself, what you do, what you like, your skills, etc."
-                value={form.description}
-                onChangeText={formDescription => {
-                    setForm({
-                        ...form,
-                        description: formDescription
-                    })
-                }}
-            />
+                <InfoTitle title="Location"/>
+                <InfoTextInput
+                    placeholder="Where do you live?"
+                    cursorColor={cursorColor}
+                    value={form.location}
+                    maxLength={40}
+                    onChangeText={formLocation => {
+                        setForm({
+                            ...form,
+                            location: formLocation.valueOf()
+                        });
+                    }}
+                />
 
-            <SaveButton onPress={() => HandleSaveForm(form.name, form.profession, form.status, form.location, form.description)}/>
+                <InfoTitle title="Description"/>
+                <InfoTextInput
+                    multiline
+                    editable
+                    numberOfLines={4}
+                    maxLength={120}
+                    placeholder="Write a short description about yourself, what you do, what you like, your skills, etc."
+                    value={form.description}
+                    onChangeText={formDescription => {
+                        setForm({
+                            ...form,
+                            description: formDescription
+                        })
+                    }}
+                />
+            </View>
+
+            <View>
+                <IconTitle iconName={faGlobe} iconSize={20} title="Your Links"/>
+                
+                <InfoTitle title="Link 1"/>
+                <InfoTextInput
+                    placeholder="Ex: mywebsite.com"
+                    cursorColor={cursorColor}
+                    value={form.link1}
+                    maxLength={40}
+                    onChangeText={formLink1 => {
+                        setForm({
+                            ...form,
+                            link1: formLink1.valueOf()
+                        });
+                    }}
+                />
+                
+                <InfoTitle title="Link 2"/>
+                <InfoTextInput
+                    placeholder="Ex: myportfolio.com"
+                    cursorColor={cursorColor}
+                    value={form.link2}
+                    maxLength={40}
+                    onChangeText={formLink2 => {
+                        setForm({
+                            ...form,
+                            link2: formLink2.valueOf()
+                        });
+                    }}
+                />
+            </View>
+
+            <View className="flex flex-row justify-between items-center mt-4">
+                <LinkIconButton title="Cancel" iconName={faCancel} linkRef={'/'}/>
+                
+                {/* Need to add a error handling in save button, to avoid null values */}
+                <SaveButton onPress={() => HandleSaveForm(form.name, form.profession, form.status, form.location, form.description, form.link1, form.link2)}/>
+            </View>
         </KeyboardAvoidingView>
     );
 }
 
 export default function FormComponent(){
     return (
-        <View>
-            <View>
-                <Text className="text-slate-800 text-center justify-center text-xl">Add here your information</Text>
-                <Text className="text-slate-600 text-center justify-center text-sm">The information will be displayed in your card</Text>
-            </View>
-            
-            <MainInfoInputs/>
-        </View>
+        <ScrollView overScrollMode="never" showsVerticalScrollIndicator={false}>
+            <Inputs/>
+        </ScrollView>
     );
 }

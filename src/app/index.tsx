@@ -10,7 +10,7 @@ import LinkIconButton from "../components/buttons/LinkIconButton";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faBriefcase, faLocationDot, faPenToSquare, faShareFromSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faBriefcase, faLink, faLocationDot, faPenToSquare, faShareFromSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 
 async function getData(keyName: string) {
     try {
@@ -49,7 +49,23 @@ function Label({ title, text, iconName }: { title: string, text: string | undefi
 
             {(title && text) ? (
                 <View>
-                    <Text className="text-xl text-slate-700 font-semibold">{ title }</Text>
+                    <Text className="text-lg text-slate-700 font-semibold">{ title }</Text>
+                    <Text className="text-base text-slate-700">{ text }</Text>
+                </View>
+            ) : (
+                <Text className="text-base text-slate-700">Loading...</Text>
+            )}
+        </View>
+    );
+}
+
+function LinkLabel({ text }: { text: string | undefined } ) {
+    return (
+        <View className="flex flex-row space-x-4 my-2">
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} size={26}/>
+            
+            { text ? (
+                <View>
                     <Text className="text-lg text-slate-700">{ text }</Text>
                 </View>
             ) : (
@@ -65,21 +81,27 @@ export default function Index() {
     const [status, setStatus] = useState<string | undefined>();
     const [location, setLocation] = useState<string | undefined>();
     const [description, setDescription] = useState<string | undefined>();
+    const [link1, setLink1] = useState<string | undefined>();
+    const [link2, setLink2] = useState<string | undefined>();
 
     useEffect(() => {
         const fetchData = async () => {
-            // what a lot of repetition, need to fix this
+            // what a lot of repetition, need to fix this, maybe change to get all the items in one function
             const nameData = await getData('name');
             const professionData = await getData('profession');
             const statusData = await getData('status');
             const locationData = await getData('location');
             const descriptionData = await getData('description');
+            const link1Data = await getData('link1');
+            const link2Data = await getData('link2');
 
             setName(nameData);
             setProfession(professionData);
             setStatus(statusData);
             setLocation(locationData);
             setDescription(descriptionData);
+            setLink1(link1Data);
+            setLink2(link2Data);
         };
 
         fetchData();
@@ -93,7 +115,7 @@ export default function Index() {
                 <TextName name={name}/>
 
                 <Image
-                    className="h-32 w-32 rounded-full"    
+                    className="h-28 w-28 rounded-full"    
                     source={{
                         uri: 'https://images.pexels.com/photos/52608/pexels-photo-52608.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                     }}
@@ -104,7 +126,8 @@ export default function Index() {
                 <Text className="text-center text-base text-slate-700">"{description}"</Text>
             </View>
             
-            <View className="items-start justify-start w-full my-10">
+            <View className="items-start justify-start w-full my-5">
+                {/* can be displayed in a Flatlist: */}
                 <Label
                     title="Profession"
                     text={profession}
@@ -124,7 +147,17 @@ export default function Index() {
                 />
             </View>
 
-            <View className="flex flex-row items-center justify-around bg-slate-200">
+            <View className="items-start justify-start w-full px-2 mb-4">
+                <LinkLabel
+                    text={link1}
+                />
+
+                <LinkLabel
+                    text={link2}
+                />
+            </View>
+
+            <View className="flex flex-row items-center justify-around">
                 <LinkIconButton
                     title="Edit"
                     linkRef={'/edit'}
