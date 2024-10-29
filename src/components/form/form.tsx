@@ -43,7 +43,7 @@ function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multilin
 const cursorColor = "#475569";
 
 // Async Storage:
-async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string, link1Value: string, link2Value: string){
+async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string, link1Value: string, link2Value: string, emailValue: string ){
     const name: [string, string] = ["name", nameValue];
     const profession: [string, string] = ["profession", professionValue];
     const status: [string, string] = ["status", statusValue];
@@ -51,9 +51,10 @@ async function storeFormData(nameValue: string, professionValue: string, statusV
     const description: [string, string] = ["description", descriptionValue];
     const link1: [string, string] = ["link1", link1Value];
     const link2: [string, string] = ["link2", link2Value];
+    const email: [string, string] = ["email", emailValue];
     
     try {
-        await AsyncStorage.multiSet([name, profession, status, location, description, link1, link2]);
+        await AsyncStorage.multiSet([name, profession, status, location, description, link1, link2, email]);
     } catch (error) {
         console.log('Saving data error: ', error);
     }
@@ -68,11 +69,12 @@ function Inputs() {
         description: '',
         link1: '',
         link2: '',
+        email: ''
     });
     
-    async function HandleSaveForm(name: string, profession: string, status: string, location: string, description: string, link1: string, link2: string){
+    async function HandleSaveForm(name: string, profession: string, status: string, location: string, description: string, link1: string, link2: string, email: string){
         try {
-            await storeFormData(name, profession, status, location, description, link1, link2);
+            await storeFormData(name, profession, status, location, description, link1, link2, email);
             router.navigate("/");
         } catch (error) {
             console.error('Saving data error.');
@@ -80,8 +82,8 @@ function Inputs() {
     }
         
     return (
-        <KeyboardAvoidingView className="mt-10 mb-4 space-y-4">
-            <View className="flex items-center justify-center mb-10">
+        <KeyboardAvoidingView className="mt-12 mb-4 space-y-4">
+            <View className="flex items-center justify-center mb-5">
                 <Text className="text-slate-800 text-xl">Tell Us About Yourself</Text>
                 <Text className="text-slate-600 text-base text-center leading-5 w-72">Fill out the form below to create a standout profile that highlights your skills and experience.</Text>
             </View>
@@ -163,7 +165,7 @@ function Inputs() {
             </View>
 
             <View>
-                <IconTitle iconName={faGlobe} iconSize={20} title="Your Links"/>
+                <IconTitle iconName={faGlobe} iconSize={20} title="Your Links and Email"/>
                 
                 <InfoTitle title="Link 1"/>
                 <InfoTextInput
@@ -192,13 +194,28 @@ function Inputs() {
                         });
                     }}
                 />
+
+                {/* Should have any kind of validation here: */}
+                <InfoTitle title="Email"/>
+                <InfoTextInput
+                    placeholder="Ex: youremail@email.com"
+                    cursorColor={cursorColor}
+                    value={form.email}
+                    maxLength={255}
+                    onChangeText={formEmail => {
+                        setForm({
+                            ...form,
+                            email: formEmail.valueOf()
+                        });
+                    }}
+                />
             </View>
 
             <View className="flex flex-row justify-between items-center mt-4">
                 <LinkIconButton title="Cancel" iconName={faCancel} linkRef={'/'}/>
                 
                 {/* Need to add a error handling in save button, to avoid null values */}
-                <SaveButton onPress={() => HandleSaveForm(form.name, form.profession, form.status, form.location, form.description, form.link1, form.link2)}/>
+                <SaveButton onPress={() => HandleSaveForm(form.name, form.profession, form.status, form.location, form.description, form.link1, form.link2, form.email)}/>
             </View>
         </KeyboardAvoidingView>
     );
