@@ -82,10 +82,11 @@ export default function Index() {
     const [link1, setLink1] = useState<string | undefined>();
     const [link2, setLink2] = useState<string | undefined>();
     const [email, setEmail] = useState<string | undefined>();
+    const [image, setImage] = useState<string | undefined>();
 
     useEffect(() => {
         const fetchData = async () => {
-            // what a lot of repetition, need to fix this, maybe change to get all the items in one function
+            // what a lot of repetition, need to fix this, maybe change to manyGet function
             const nameData = await getData('name');
             const professionData = await getData('profession');
             const statusData = await getData('status');
@@ -94,6 +95,7 @@ export default function Index() {
             const link1Data = await getData('link1');
             const link2Data = await getData('link2');
             const emailData = await getData('email');
+            const imageData = await getData('profile_picture');
 
             setName(nameData);
             setProfession(professionData);
@@ -103,6 +105,7 @@ export default function Index() {
             setLink1(link1Data);
             setLink2(link2Data);
             setEmail(emailData);
+            setImage(imageData);
         };
 
         fetchData();
@@ -115,7 +118,7 @@ export default function Index() {
             <View className="flex flex-row items-center justify-start px-4">
                 <Image    
                     source={{
-                        uri: 'https://media.licdn.com/dms/image/v2/D5603AQHN6y-riF3tZg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1728260894591?e=1735776000&v=beta&t=B1zATCM4p2KgwcU_oxKvWWMx_YDWIbCjFiwwwdsrGgs',
+                        uri: image,
                     }}
                     height={90}
                     width={90}

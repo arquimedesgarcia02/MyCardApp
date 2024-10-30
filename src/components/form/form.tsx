@@ -4,13 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCancel, faGlobe, faIdCard } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faGlobe, faIdCard, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import { View, Text, TextInput, TextInputProps, KeyboardAvoidingView, ScrollView } from "react-native";
 import { router } from "expo-router";
 
 import SaveButton from "../buttons/SaveButton";
 import LinkIconButton from "../buttons/LinkIconButton";
+import ImagePickerComponent from "../image_picker/image_picker";
 
 function IconTitle({ title, iconName, iconSize } : { title: string, iconName: IconProp, iconSize: number } ) {
     return (
@@ -43,7 +44,16 @@ function InfoTextInput({ onChangeText, value, placeholder, cursorColor, multilin
 const cursorColor = "#475569";
 
 // Async Storage:
-async function storeFormData(nameValue: string, professionValue: string, statusValue: string, locationValue: string, descriptionValue: string, link1Value: string, link2Value: string, emailValue: string ){
+async function storeFormData(
+    nameValue: string,
+    professionValue: string,
+    statusValue: string, 
+    locationValue: string,
+    descriptionValue: string,
+    link1Value: string,
+    link2Value: string,
+    emailValue: string 
+){
     const name: [string, string] = ["name", nameValue];
     const profession: [string, string] = ["profession", professionValue];
     const status: [string, string] = ["status", statusValue];
@@ -86,6 +96,11 @@ function Inputs() {
             <View className="flex items-center justify-center mb-5">
                 <Text className="text-slate-800 text-xl">Tell Us About Yourself</Text>
                 <Text className="text-slate-600 text-base text-center leading-5 w-72">Fill out the form below to create a standout profile that highlights your skills and experience.</Text>
+            </View>
+
+            <View>
+                <IconTitle iconName={faUser} iconSize={20} title="Take your profile picture"/>
+                <ImagePickerComponent/>
             </View>
 
             {/* Lot of repetition here, should change that */}
