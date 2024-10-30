@@ -73,6 +73,29 @@ function LinkLabel({ text }: { text: string | undefined } ) {
     );
 }
 
+function ProfilePicture({ imageUri } : { imageUri: string | undefined }) {
+    return(
+        <View>
+            {
+                imageUri ? (
+                    <Image    
+                        source={{
+                            uri: imageUri,
+                        }}
+                        height={90}
+                        width={90}
+                        borderRadius={90}
+                    />
+                ) : (
+                    <View className="bg-slate-200 w-28 h-28 rounded-full items-center justify-center">
+                        <Text className="text-slate-700 text-base text-center">Loading profile picture...</Text>
+                    </View>
+                )
+            }
+        </View>
+    );
+}
+
 export default function Index() {
     const [name, setName] = useState<string | undefined>();
     const [profession, setProfession] = useState<string | undefined>();
@@ -116,14 +139,7 @@ export default function Index() {
             <StatusBar/>
 
             <View className="flex flex-row items-center justify-start px-4">
-                <Image    
-                    source={{
-                        uri: image,
-                    }}
-                    height={90}
-                    width={90}
-                    borderRadius={90}
-                />
+                <ProfilePicture imageUri={image}/>
                 <TextName name={name}/>
             </View>
             
