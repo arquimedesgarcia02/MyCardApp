@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Image, SafeAreaView, StatusBar, Text, View } from "react-native";
+import { captureRef } from "react-native-view-shot";
 
-import { Image, SafeAreaView, StatusBar, Text, View } from "react-native";
+import * as Sharing from 'expo-sharing';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import LinkIconButton from "../components/buttons/LinkIconButton";
-
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faArrowUpRightFromSquare, faBriefcase, faEnvelope, faLocationDot, faPenToSquare, faShareFromSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faBriefcase, faEnvelope, faLocationDot, faPenToSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
+
+import LinkIconButton from "../components/buttons/LinkIconButton";
+import { ShareButton } from "../components/buttons/ShareButton";
 
 async function getData(keyName: string) {
     try {
@@ -134,55 +137,79 @@ export default function Index() {
         fetchData();
     });
     
+    // Share:
+    const shareRef = useRef(null);
+
+    const shareCard = async () => {
+        try {
+            const uri = await captureRef(shareRef, {
+                format: "png",
+                quality: 1,
+            });
+            
+            const sharePermission = await Sharing.isAvailableAsync();
+            if (!sharePermission) {
+                Alert.alert("Sharing is not available on this platform");
+                return;
+            }
+
+            await Sharing.shareAsync(uri);
+        } catch (error) {
+            console.error('Share card error.', error);
+        }
+    }
+
     return (
-        <SafeAreaView className="flex-1 items-center justify-center bg-slate-100 px-10 space-y-4">
+        <SafeAreaView className="flex-1 items-center justify-center bg-slate-100 space-y-8">
             <StatusBar/>
 
-            <View className="flex flex-row items-center justify-start px-4">
-                <ProfilePicture imageUri={image}/>
-                <TextName name={name}/>
-            </View>
-            
-            <View className="mt-4 border-b border-b-slate-600 pb-4">
-                <Text className="text-center text-base text-slate-700">"{description}"</Text>
-            </View>
-
-            <View className="flex flex-row justify-center items-center space-x-2">
-                <FontAwesomeIcon icon={faEnvelope} size={20} color="#334155"/>
-                <Text className="text-slate-700 text-base underline">{email}</Text>
-            </View>
-            
-            <View className="items-start justify-start w-full">
-                {/* This can be displayed in a Flatlist? */}
-                <Label
-                    title="Profession"
-                    text={profession}
-                    iconName={faBriefcase}
-                />
+            <View className="space-y-4 px-10 py-2 bg-slate-100" ref={shareRef} collapsable={false}>
+                <View className="flex flex-row items-center justify-start px-4">
+                    <ProfilePicture imageUri={image}/>
+                    <TextName name={name}/>
+                </View>
                 
-                <Label
-                    title="Status"
-                    text={status}
-                    iconName={faSquareCheck}
-                />
+                <View className="mt-4 border-b border-b-slate-600 pb-4">
+                    <Text className="text-center text-base text-slate-700">"{description}"</Text>
+                </View>
 
-                <Label
-                    title="Location"
-                    text={location}
-                    iconName={faLocationDot}
-                />
-            </View>
-
-            <View className="items-start justify-start w-full px-2">
-                <Text className="font-semibold text-slate-800 text-xl mb-2">Links</Text>
+                <View className="flex flex-row justify-center items-center space-x-2">
+                    <FontAwesomeIcon icon={faEnvelope} size={20} color="#334155"/>
+                    <Text className="text-slate-700 text-base underline">{email}</Text>
+                </View>
                 
-                <LinkLabel
-                    text={link1}
-                />
+                <View className="items-start justify-start w-full">
+                    {/* This can be displayed in a Flatlist? */}
+                    <Label
+                        title="Profession"
+                        text={profession}
+                        iconName={faBriefcase}
+                    />
+                    
+                    <Label
+                        title="Status"
+                        text={status}
+                        iconName={faSquareCheck}
+                    />
 
-                <LinkLabel
-                    text={link2}
-                />
+                    <Label
+                        title="Location"
+                        text={location}
+                        iconName={faLocationDot}
+                    />
+                </View>
+                
+                <View className="items-start justify-start w-full px-2">
+                    <Text className="font-semibold text-slate-800 text-xl mb-2">Links</Text>
+                    
+                    <LinkLabel
+                        text={link1}
+                    />
+
+                    <LinkLabel
+                        text={link2}
+                    />
+                </View>
             </View>
 
             <View className="flex flex-row w-full items-center justify-around">
@@ -192,11 +219,7 @@ export default function Index() {
                     iconName={faPenToSquare}
                 />
 
-                <LinkIconButton
-                    title="Share"
-                    linkRef={'/edit'}
-                    iconName={faShareFromSquare}
-                />
+                <ShareButton onPress={shareCard}/>
             </View>            
         </SafeAreaView>
     );
