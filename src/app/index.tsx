@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Image, SafeAreaView, StatusBar, Text, View } from "react-native";
 import { captureRef } from "react-native-view-shot";
-
-import * as Sharing from 'expo-sharing';
-
+import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Sharing from 'expo-sharing';
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faArrowUpRightFromSquare, faBriefcase, faEnvelope, faLocationDot, faPenToSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 
+import ShareButton from "../components/buttons/ShareButton";
 import LinkIconButton from "../components/buttons/LinkIconButton";
-import { ShareButton } from "../components/buttons/ShareButton";
+import OnboardingPresentation from "../components/presentation_modal/onboarding_presentation";
+
 
 async function getData(keyName: string) {
     try {
         const value = await AsyncStorage.getItem(keyName);
 
         if(value === null){
-            console.error('One or more values are null.');
             return;
         }
         
@@ -99,7 +99,7 @@ function ProfilePicture({ imageUri } : { imageUri: string | undefined }) {
     );
 }
 
-export default function Index() {
+function MainView() {
     const [name, setName] = useState<string | undefined>();
     const [profession, setProfession] = useState<string | undefined>();
     const [status, setStatus] = useState<string | undefined>();
@@ -109,7 +109,7 @@ export default function Index() {
     const [link2, setLink2] = useState<string | undefined>();
     const [email, setEmail] = useState<string | undefined>();
     const [image, setImage] = useState<string | undefined>();
-
+    
     useEffect(() => {
         const fetchData = async () => {
             // what a lot of repetition, need to fix this, maybe change to manyGet function
@@ -136,7 +136,7 @@ export default function Index() {
 
         fetchData();
     });
-    
+
     // Share:
     const shareRef = useRef(null);
 
@@ -159,11 +159,9 @@ export default function Index() {
         }
     }
 
-    return (
-        <SafeAreaView className="flex-1 items-center justify-center bg-slate-100 space-y-8">
-            <StatusBar/>
-
-            <View className="space-y-4 px-10 py-2 bg-slate-100" ref={shareRef} collapsable={false}>
+    return(
+        <View>
+            <View className="space-y-4 px-10 py-4 bg-slate-100" ref={shareRef} collapsable={false}>
                 <View className="flex flex-row items-center justify-start px-4">
                     <ProfilePicture imageUri={image}/>
                     <TextName name={name}/>
@@ -212,7 +210,7 @@ export default function Index() {
                 </View>
             </View>
 
-            <View className="flex flex-row w-full items-center justify-around">
+            <View className="flex flex-row w-full items-center justify-around mt-10">
                 <LinkIconButton
                     title="Edit"
                     linkRef={'/edit'}
@@ -220,7 +218,52 @@ export default function Index() {
                 />
 
                 <ShareButton onPress={shareCard}/>
-            </View>            
+            </View>
+        </View>
+    );
+}
+
+export default function Index() {
+    const [firstTime, setFirstTime] = useState<boolean | undefined>(false);
+
+    function handleOnboardingExit() {
+        router.navigate("/edit");
+    }
+
+    const isFirstTime = async () => {
+        try {
+            const value = await AsyncStorage.getItem('firstTime');
+
+            if (value === null) {
+                await AsyncStorage.setItem('firstTime', 'false');
+                return true;
+            }
+
+            return false;
+        } catch (error) {
+            console.error('Error retrieving data from AsyncStorage:', error);
+        }
+    }
+
+    useEffect(() => {
+        const checkFirstTime = async () => {
+            const result =  await isFirstTime();
+            setFirstTime(result);
+        }
+        
+        checkFirstTime();
+    });
+
+    return (
+        <SafeAreaView className="flex-1">
+            { firstTime ? (
+                <OnboardingPresentation onSkipPress={handleOnboardingExit}/>
+            ) : (
+                <SafeAreaView className="flex flex-1 justify-center items-center bg-slate-100">
+                    <StatusBar/>
+                    <MainView/>
+                </SafeAreaView>
+            )} 
         </SafeAreaView>
     );
 }
