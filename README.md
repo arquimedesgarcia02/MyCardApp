@@ -1,29 +1,33 @@
-# MyCardApp
+# MyCardApp 
 
-🇺🇸 Ready to level up your networking game? 🎉 Meet MyCardApp, the easiest way to create digital business cards and share them with anyone online!🔥 Pick your style, add your deets, and boom—you're good to go. Perfect for pros, freelancers, and anyone who’s tired of handing out boring old paper cards. Say hello to the future of networking and make sharing your info super easy (and eco-friendly) with MyCardApp! 🚀
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-## How to Run?
 
-install dependencies:
+**MyCardApp** is a React Native application built with Expo that allows users to create and share digital business cards. It's designed to help professionals easily share their contact information and showcase their work. 
+
+## Running in your machine
+
+Follow these steps to get the project up and running locally.
+
+### Install dependencies
 
         npm install
 
-run using:
+Install dependencies with Expo:
+
+        npx expo install
+
+### Run with
 
         npx expo start
 
-This project use NativeWind, so you have to install it too:
+## Install
 
-[NativeWindLink](linkpronativewind)
+[Get the APK in the releases area (soon)]()
 
-## How to use in my phone?
+[Get the app in the Google Play Store (soon)]()
 
-MyCardApp is in the main App Stores:
-
-[GooglePlay](googleplaylink)
-
-[AppleStore (Soon)](soon)
-
-Or you can get the app from our releases area:
-
-[Releases]()
+The app is available only in Android.
