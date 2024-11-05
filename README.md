@@ -34,3 +34,7 @@ The app is available only in Android for now.
 ## Preview
 
 ![App Preview](./assets/app_preview.jpeg)
+
+## License
+
+[MIT License](LICENSE)
