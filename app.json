@@ -20,7 +20,10 @@
         "foregroundImage": "./assets/app_images/adaptive-icon.png",
         "backgroundColor": "#f1f5f9"
       },
-      "package": "com.ag.mycardapp"
+      "package": "com.ag.mycardapp",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +43,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "07395c79-c137-4895-a972-fbd3bce7695b"
+      }
     }
   }
 }

@@ -5,7 +5,9 @@
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-**MyCardApp** is a React Native application built with Expo that allows users to create and share digital business cards. It's designed to help professionals easily share their contact information and showcase their work. 
+**MyCardApp** is a React Native application built with Expo that allows users to create and share digital business cards. It's designed to help professionals easily share their contact information and showcase their work.
+
+This app is currently in Beta.
 
 ## Running locally
 
@@ -25,7 +27,7 @@ Install dependencies with Expo:
 
 ## Install and use in your phone
 
-[Get the APK in the releases area (soon)]()
+[Get the app in the repository releases area](https://github.com/arquimedesgarcia02/MyCardApp/releases)
 
 [Get the app in the Google Play Store (soon)]()
 
